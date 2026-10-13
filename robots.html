@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f7">
+  <title>人形机器人展厅 | 机器人档案</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: light; --ink:#181a1c; --muted:#73777d; --line:#e5e7e9; --paper:#f5f6f7; --white:#fff; --red:#c93232; --green:#267a55; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:"Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; -webkit-font-smoothing:antialiased; }
+    a { color:inherit; }
+    .shell { min-height:100vh; }
+    .topbar { height:58px; display:flex; align-items:center; justify-content:space-between; padding:0 max(28px, calc((100vw - 1240px)/2)); border-bottom:1px solid #e6e8ea; background:rgba(255,255,255,.8); backdrop-filter:blur(18px); position:sticky; top:0; z-index:5; }
+    .brand { display:flex; align-items:center; gap:11px; font-size:14px; font-weight:600; letter-spacing:0; }
+    .brand-mark { width:23px; height:23px; border:1.5px solid var(--ink); border-radius:7px; display:grid; place-items:center; font:500 10px "DM Mono",monospace; }
+    .top-meta { color:var(--muted); font-size:12px; }
+    main { width:min(1240px, calc(100% - 56px)); margin:0 auto; }
+    .intro { padding:48px 0 28px; display:flex; justify-content:space-between; align-items:end; gap:24px; }
+    .eyebrow { color:#71767b; font:500 11px "DM Mono",monospace; letter-spacing:1.4px; text-transform:uppercase; }
+    h1 { margin:10px 0 8px; font-size:32px; line-height:1.2; letter-spacing:0; font-weight:600; }
+    .subtitle { margin:0; color:var(--muted); font-size:14px; }
+    .collection { display:flex; align-items:center; gap:10px; color:#666b70; font:12px "DM Mono",monospace; white-space:nowrap; }
+    .collection::before { content:""; width:7px; height:7px; border-radius:50%; background:#48a879; box-shadow:0 0 0 3px #48a87920; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; padding-bottom:38px; }
+    .robot-card { min-width:0; }
+    .robot-card .n-card { border-radius:8px; border-color:#e5e7e9; box-shadow:0 2px 7px #20252c08; transition:transform .25s ease,box-shadow .25s ease; overflow:hidden; }
+    .robot-card .n-card:hover { transform:translateY(-3px); box-shadow:0 12px 28px #20252c11; }
+    .robot-card .n-card__content { padding:0 !important; }
+    .photo { height:235px; background:#f0f1f2; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+    .photo img { width:100%; height:100%; object-fit:contain; display:block; transition:opacity .25s ease; }
+    .robot-card:hover .photo img { opacity:.96; }
+    .photo .index { position:absolute; left:15px; top:14px; padding:5px 8px; border-radius:4px; background:#ffffffd9; backdrop-filter:blur(8px); font:11px "DM Mono",monospace; }
+    .photo .year { position:absolute; right:15px; top:14px; color:#fff; font:11px "DM Mono",monospace; text-shadow:0 1px 8px #0009; }
+    .info { padding:18px 18px 16px; }
+    .maker { color:#72767b; font:500 10px "DM Mono",monospace; text-transform:uppercase; letter-spacing:1.1px; }
+    h2 { margin:5px 0 2px; font-size:21px; line-height:1.25; letter-spacing:0; font-weight:600; }
+    .alias { color:#7a7e82; font-size:12px; }
+    .chips { display:flex; gap:6px; flex-wrap:wrap; margin:13px 0 14px; }
+    .chips .n-tag { border-radius:4px; font-size:11px; }
+    .summary { font-size:12px; line-height:1.8; color:#51565a; min-height:65px; margin:0; }
+    .divider { border:0; border-top:1px solid #eceeef; margin:14px 0 12px; }
+    .details { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .detail-label { display:block; color:#8a8e92; font-size:10px; margin-bottom:4px; }
+    .detail-value { font-size:11px; line-height:1.65; color:#373b3e; }
+    .bottom { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:16px; padding-top:13px; border-top:1px solid #eceeef; }
+    .qr-inline { display:flex; align-items:center; gap:9px; min-width:0; }
+    .qr-box { width:52px; height:52px; border:1px solid #e6e8e9; background:white; border-radius:4px; display:grid; place-items:center; flex:none; overflow:hidden; }
+    .qr-box img { width:46px; height:46px; image-rendering:pixelated; }
+    .qr-caption { min-width:0; }
+    .qr-caption strong { display:block; font-size:11px; font-weight:500; }
+    .qr-caption span { display:block; margin-top:3px; color:#8b8f93; font-size:10px; }
+    .bottom .n-button { border-radius:5px; font-size:11px; }
+    .footer { border-top:1px solid #e1e3e5; padding:16px 0 24px; display:flex; justify-content:space-between; gap:16px; color:#81858a; font-size:11px; }
+    .notice { padding:12px 14px; margin:0 0 20px; border:1px solid #ead9b7; background:#fffaf0; border-radius:6px; color:#725b30; font-size:12px; line-height:1.7; }
+    .notice strong { font-weight:600; }
+    .toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 16px; }
+    .toolbar-left { display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
+    .search-field { width:min(380px,100%); }
+    .toolbar .n-button,.pagination .n-button { border-radius:5px; }
+    .result-count { color:#777c80; font-size:11px; white-space:nowrap; }
+    .batch-status { color:#73777d; font-size:11px; min-height:17px; margin:-6px 0 12px; }
+    .pagination { display:flex; justify-content:center; align-items:center; gap:14px; padding:4px 0 28px; color:#686d72; font:12px "DM Mono",monospace; }
+    .empty-state { padding:48px 18px; text-align:center; color:#74797e; font-size:13px; }
+    .focus-view .grid { grid-template-columns:minmax(0, 780px); justify-content:center; }
+    .focus-view .photo { height:clamp(270px,42vw,430px); }
+    .focus-view .info { padding:22px 24px 20px; }
+    .focus-view h2 { font-size:26px; }
+    .focus-view .summary { min-height:0; font-size:13px; }
+    .focus-view .details { grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px 28px; }
+    .focus-view .detail-value { font-size:12px; }
+    .focus-view .qr-box { width:76px; height:76px; }
+    .focus-view .qr-box img { width:68px; height:68px; }
+    .focus-view .qr-caption strong { font-size:12px; }
+    .focus-view .bottom { margin-top:20px; }
+    .focus-nav { margin:10px 0 17px; display:flex; align-items:center; justify-content:space-between; }
+    .focus-nav .n-button { border-radius:5px; }
+    .load-state { padding:40px; color:var(--muted); text-align:center; }
+    @media (max-width:900px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .photo { height:220px; } }
+    @media (max-width:620px) {
+      .topbar { height:52px; padding:0 18px; } .top-meta { font-size:10px; }
+      main { width:calc(100% - 32px); }
+      .intro { padding:32px 0 21px; align-items:flex-start; flex-direction:column; gap:12px; }
+      h1 { font-size:27px; } .subtitle { font-size:12px; line-height:1.7; }
+      .grid { grid-template-columns:minmax(0,1fr); gap:13px; padding-bottom:26px; }
+      .photo { height:240px; } .info { padding:16px; }
+      .summary { min-height:0; }
+      .toolbar { align-items:stretch; flex-direction:column; }
+      .toolbar-left { width:100%; justify-content:space-between; }
+      .search-field { width:100%; }
+      .toolbar > .n-button { width:100%; }
+      .result-count { padding-top:4px; }
+      .footer { flex-direction:column; gap:5px; }
+      .focus-view .photo { height:280px; }
+      .focus-view .info { padding:18px 16px; }
+      .focus-view h2 { font-size:23px; }
+      .focus-view .details { gap:14px; }
+      .focus-view .bottom { align-items:flex-end; }
+      .focus-nav { gap:8px; }
+    }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+    .fade-in { animation:rise .45s both; }
+    @keyframes rise { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+  <script type="importmap">
+    { "imports": { "vue": "https://esm.sh/vue@3.5.13/dist/vue.esm-browser.js" } }
+  </script>
+</head>
+<body>
+  <div id="app"><div class="load-state">正在载入机器人档案…</div></div>
+  <script type="module">
+    import { createApp, ref, computed, nextTick, watch, h } from 'vue';
+    import { NCard } from 'https://esm.sh/naive-ui@2.41.0/es/card?external=vue';
+    import { NButton } from 'https://esm.sh/naive-ui@2.41.0/es/button?external=vue';
+    import { NTag } from 'https://esm.sh/naive-ui@2.41.0/es/tag?external=vue';
+    import { NIcon } from 'https://esm.sh/naive-ui@2.41.0/es/icon?external=vue';
+    import { NInput } from 'https://esm.sh/naive-ui@2.41.0/es/input?external=vue';
+
+    const ArrowIcon = () => h('svg', { width:16, height:16, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', 'stroke-width':1.8, 'stroke-linecap':'round', 'stroke-linejoin':'round', 'aria-hidden':'true' }, [h('path',{d:'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'}),h('path',{d:'m7 10 5 5 5-5'}),h('path',{d:'M12 15V3'})]);
+
+    createApp({
+      components:{ NCard, NButton, NTag, NIcon, NInput, ArrowIcon },
+      setup(){
+        const activeId = ref(new URLSearchParams(location.search).get('id'));
+        const isLocalPreview = location.protocol === 'file:' || ['localhost','127.0.0.1'].includes(location.hostname);
+        const robots = ref([]);
+        const search = ref('');
+        const page = ref(1);
+        const pageSize = 12;
+        const batchStatus = ref('');
+        const filteredRobots = computed(() => {
+          const term = search.value.trim().toLocaleLowerCase();
+          if (!term) return robots.value;
+          return robots.value.filter(r => [r.id,r.company,r.name,r.year,r.country].join(' ').toLocaleLowerCase().includes(term));
+        });
+        const pageCount = computed(() => Math.max(1,Math.ceil(filteredRobots.value.length/pageSize)));
+        const robotsShown = computed(() => {
+          if (activeId.value) return robots.value.filter(r => r.id === activeId.value);
+          const start = (page.value-1)*pageSize;
+          return filteredRobots.value.slice(start,start+pageSize);
+        });
+        const deploymentBase = computed(() => isLocalPreview ? 'https://bwys-34.github.io/robot-QR-code/robots.html' : `${location.origin}${location.pathname}`);
+        const linkFor = robot => `${deploymentBase.value}?id=${encodeURIComponent(robot.id)}`;
+        function qrCode(node,robot,size){
+          node.innerHTML = '';
+          return new QRCode(node,{text:linkFor(robot),width:size,height:size,colorDark:'#17191b',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+        }
+        function makeQr(robot){
+          const node = document.getElementById(`qr-${robot.id}`);
+          if (node && window.QRCode) qrCode(node,robot,144);
+        }
+        function qrPng(robot){
+          const node = document.createElement('div');
+          const matrix = qrCode(node,robot,256)._oQRCode;
+          const count = matrix.getModuleCount();
+          const scale = Math.floor(768/(count+8));
+          const offset = Math.floor((768-count*scale)/2);
+          const canvas = document.createElement('canvas');
+          canvas.width = canvas.height = 768;
+          const context = canvas.getContext('2d');
+          context.fillStyle = '#ffffff';
+          context.fillRect(0,0,768,768);
+          context.fillStyle = '#17191b';
+          for(let row=0;row<count;row++){
+            for(let col=0;col<count;col++){
+              if(matrix.isDark(row,col)) context.fillRect(offset+col*scale,offset+row*scale,scale,scale);
+            }
+          }
+          return canvas.toDataURL('image/png');
+        }
+        async function downloadQr(robot){
+          const source = qrPng(robot);
+          const a = document.createElement('a'); a.href = source; a.download = `机器人二维码_${robot.id}_${robot.name.replaceAll(' ','_')}.png`; a.click();
+        }
+        async function downloadAll(){
+          if (!window.JSZip || !window.QRCode) { batchStatus.value='二维码组件暂不可用，请刷新页面后重试。'; return; }
+          batchStatus.value='正在生成二维码…';
+          const zip = new JSZip();
+          const folder = zip.folder('机器人二维码');
+          for (let i=0;i<robots.value.length;i++){
+            const robot=robots.value[i];
+            folder.file(`机器人二维码_${robot.id}_${robot.name.replaceAll(' ','_')}.png`,qrPng(robot).split(',')[1],{base64:true});
+            if((i+1)%15===0){batchStatus.value=`正在生成 ${i+1} / ${robots.value.length}`; await new Promise(requestAnimationFrame);}
+          }
+          const blob=await zip.generateAsync({type:'blob'});
+          const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='机器人二维码_150台.zip'; a.click();
+          setTimeout(()=>URL.revokeObjectURL(url),1000);
+          batchStatus.value=`已生成 ${robots.value.length} 张二维码，链接到对应机器人档案。`;
+        }
+        function changePage(next){page.value=Math.min(pageCount.value,Math.max(1,next));window.scrollTo({top:0,behavior:'smooth'});}
+        function showAll(){ activeId.value = null; history.pushState({},'',location.pathname); window.scrollTo({top:0,behavior:'smooth'}); }
+        window.addEventListener('popstate',()=>{activeId.value=new URLSearchParams(location.search).get('id')});
+        fetch('robots-data.json').then(response=>response.json()).then(data=>{robots.value=data;}).catch(()=>{batchStatus.value='档案数据读取失败，请确认 HTML 与 robots-data.json 位于同一目录。'});
+        watch(robotsShown,async items=>{await nextTick();items.forEach(makeQr);},{flush:'post'});
+        watch(search,()=>{page.value=1;});
+        return { robots, robotsShown, filteredRobots, activeId, isLocalPreview, search, page, pageCount, batchStatus, changePage, makeQr, downloadQr, downloadAll, showAll };
+      },
+      template:`
+        <div class="shell" :class="{'focus-view':activeId}">
+            <header class="topbar">
+              <div class="brand"><span class="brand-mark">R</span><span>机器人档案</span></div>
+              <div class="top-meta">HUMANOID ROBOT EXHIBITION</div>
+            </header>
+            <main>
+              <section class="intro fade-in">
+                <div><div class="eyebrow">EXHIBITION / HUMANOID ROBOTS</div><h1>{{ activeId ? '机器人档案' : '人形机器人档案' }}</h1><p class="subtitle">按编号浏览展厅机器人资料，扫描二维码可直接查看单台档案。</p></div>
+                <div class="collection">{{ activeId ? '单机介绍' : robots.length + ' 台档案' }}</div>
+              </section>
+              <div v-if="isLocalPreview" class="notice"><strong>本地预览</strong>　二维码指向展厅的 GitHub Pages 正式网址，网站上线后可扫码查看。</div>
+              <div v-if="activeId && !robotsShown.length" class="notice">未找到该机器人档案。<n-button text @click="showAll">返回全部档案</n-button></div>
+              <div v-if="activeId && robotsShown.length" class="focus-nav"><n-button quaternary size="small" @click="showAll">← 全部机器人</n-button><span class="eyebrow">编号 {{ activeId }}</span></div>
+              <div v-if="!activeId" class="toolbar">
+                <div class="toolbar-left"><n-input v-model:value="search" class="search-field" clearable placeholder="搜索编号、机器人名称或公司" /><span class="result-count">{{ filteredRobots.length }} 条档案</span></div>
+                <n-button type="primary" @click="downloadAll"><template #icon><n-icon><ArrowIcon /></n-icon></template>下载全部二维码 ZIP</n-button>
+              </div>
+              <div v-if="batchStatus" class="batch-status" role="status">{{ batchStatus }}</div>
+              <section v-if="robotsShown.length" class="grid">
+                <article v-for="(robot,index) in robotsShown" :key="robot.id" class="robot-card fade-in" :style="{'animation-delay':(index*70)+'ms'}">
+                  <n-card :bordered="true" :content-style="{padding:'0'}">
+                    <div class="photo"><img :src="robot.photo" :alt="robot.name + ' 展示照片'" loading="lazy"><span class="index">NO. {{ robot.id.padStart(3,'0') }}</span><span class="year">{{ robot.year }}</span></div>
+                    <div class="info">
+                      <div class="maker">{{ robot.company }}</div><h2>{{ robot.name }}</h2>
+                      <div class="chips"><n-tag size="small" :bordered="false">{{ robot.country }}</n-tag><n-tag size="small" :bordered="false" type="success">人形机器人</n-tag></div>
+                      <p class="summary">{{ robot.intro }}</p>
+                      <hr class="divider">
+                      <div class="details">
+                        <div><span class="detail-label">技术路线</span><div class="detail-value">{{ robot.tech }}</div></div>
+                        <div><span class="detail-label">特点与局限</span><div class="detail-value">{{ robot.prosCons }}</div></div>
+                        <div><span class="detail-label">应用场景</span><div class="detail-value">{{ robot.use }}</div></div>
+                      </div>
+                      <div class="bottom">
+                        <div class="qr-inline"><div class="qr-box" :id="'qr-'+robot.id" aria-label="机器人详情二维码"></div><div class="qr-caption"><strong>扫码查看档案</strong><span>编号 {{ robot.id }} · PNG</span></div></div>
+                        <n-button size="small" secondary @click="downloadQr(robot)"><template #icon><n-icon><ArrowIcon /></n-icon></template>保存二维码</n-button>
+                      </div>
+                    </div>
+                  </n-card>
+                </article>
+              </section>
+              <div v-else-if="!activeId && robots.length" class="empty-state">没有找到匹配的机器人档案。</div>
+              <nav v-if="!activeId && pageCount>1" class="pagination" aria-label="档案分页">
+                <n-button quaternary size="small" :disabled="page<=1" @click="changePage(page-1)">上一页</n-button>
+                <span>第 {{ page }} / {{ pageCount }} 页</span>
+                <n-button quaternary size="small" :disabled="page>=pageCount" @click="changePage(page+1)">下一页</n-button>
+              </nav>
+              <footer class="footer"><span>资料来源：展厅机器人信息表 · 页面摘要整理</span><span>编号与二维码一一对应</span></footer>
+            </main>
+        </div>
+      `
+    }).mount('#app');
+  </script>
+</body>
+</html>
